@@ -1,0 +1,32 @@
+-- Erstelle die Tabelle für Pokemon
+CREATE TABLE IF NOT EXISTS pokemon (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    height INTEGER,
+    weight INTEGER
+);
+
+-- Erstelle die Tabelle für Typen
+CREATE TABLE IF NOT EXISTS types (
+    id INTEGER PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL
+);
+
+-- Erstelle die Zwischentabelle für die n:m-Beziehung zwischen Pokemon und Typen
+CREATE TABLE IF NOT EXISTS pokemon_types (
+    pokemon_id INTEGER,
+    type_id INTEGER,
+    PRIMARY KEY (pokemon_id, type_id),
+    FOREIGN KEY (pokemon_id) REFERENCES pokemon(id) ON DELETE CASCADE,
+    FOREIGN KEY (type_id) REFERENCES types(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS type_relations (
+    attacker_type_id INTEGER,
+    defender_type_id INTEGER,
+    effectiveness TEXT CHECK(effectiveness IN ('strong', 'weak', 'immune')),
+    PRIMARY KEY (attacker_type_id, defender_type_id),
+    FOREIGN KEY (attacker_type_id) REFERENCES types(id) ON DELETE CASCADE,
+    FOREIGN KEY (defender_type_id) REFERENCES types(id) ON DELETE CASCADE
+);
